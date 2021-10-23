@@ -3,6 +3,8 @@
 # CS3700, Fall 2021
 # TCP Project Starter Code
 
+# TODO:
+# Queue for non-continous packets
 
 import datetime
 import json

@@ -4,6 +4,14 @@
 # TCP Project Starter Code
 #
 
+# TODO:
+# Slow start
+# Congestion Control
+# Retransmission
+# Handshaking
+# Flow control
+# Window scaling
+
 import datetime
 import json
 import sys
