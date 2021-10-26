@@ -42,7 +42,7 @@ def log(string):
 def send_next_packet():
   global SEQUENCE
 
-  data = sys.stdin.buffer.read(DATA_SIZE)
+  data = sys.stdin.buffer.read(DATA_SIZE).encode()
   if (len(data) > 0):
     msg = json.dumps({"sequence": SEQUENCE, "data": data.decode('utf-8'), "ack": False, "eof": False})
     SEQUENCE += len(data)
