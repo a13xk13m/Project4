@@ -59,6 +59,8 @@ while True:
         sys.stdout.buffer.write(b64decode(decoded['data']))
 
       # Send back an ack to the sender
+      print('recv sequence')
+      print('decoded {} len decoded {}'.format(decoded['sequence'], len(decoded['data'])))
       msg = json.dumps({"ack": decoded['sequence'] + len(decoded['data'])})
       log("ABOUT TO SEND " + msg)
       if sock.sendto(msg.encode(), addr) < len(msg):
