@@ -45,7 +45,6 @@ while True:
     try:
       decoded = json.loads(data.decode())
       decodedData = base64.b64decode(decoded['data'].encode('ascii'))
-      log(decodedData.decode('ascii'))
       # If the EOF flag is set, exit
       if (decoded['eof']):
         log("[completed]")
@@ -59,7 +58,6 @@ while True:
         sys.stdout.buffer.write(decodedData)
 
       # Send back an ack to the sender
-      log(str(len(decodedData)))
       msg = json.dumps({"ack": decoded['sequence'] + len(decodedData)})
       log("ABOUT TO SEND " + msg)
       if sock.sendto(msg.encode(), addr) < len(msg):
