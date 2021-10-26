@@ -44,7 +44,6 @@ while True:
     (data, addr) = result
 
     try:
-      print(data)
       decoded = json.loads(data.decode())
       decodedData = base64.b64decode(decoded['data'].encode('ascii'))
       print(decodedData)
