@@ -45,7 +45,7 @@ while True:
     try:
       decoded = json.loads(data.decode())
       decodedData = base64.b64decode(decoded['data'].encode('ascii'))
-      log(decodedData)
+      log(decodedData.encode('ascii'))
       # If the EOF flag is set, exit
       if (decoded['eof']):
         log("[completed]")
