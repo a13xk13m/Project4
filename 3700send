@@ -43,7 +43,7 @@ def send_next_packet():
 
   data = sys.stdin.buffer.read(DATA_SIZE)
   if (len(data) > 0):
-    msg = json.dumps({"sequence": SEQUENCE, "data": data.decode()), "ack": False, "eof": False})
+    msg = json.dumps({"sequence": SEQUENCE, "data": data.decode(), "ack": False, "eof": False})
     SEQUENCE += len(data)
 
     if sock.sendto(msg, dest) < len(msg):
