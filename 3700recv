@@ -43,6 +43,7 @@ while True:
     (data, addr) = result
 
     try:
+      print(data)
       decoded = json.loads(data.decode())
 
       # If the EOF flag is set, exit
