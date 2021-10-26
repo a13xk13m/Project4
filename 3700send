@@ -43,6 +43,7 @@ def send_next_packet():
   global SEQUENCE
 
   data = sys.stdin.buffer.read(DATA_SIZE)
+  print(data)
   if (len(data) > 0):
     msg = json.dumps({"sequence": SEQUENCE, "data": base64.b64encode(data).decode('ascii'),
      "ack": False, "eof": False})
