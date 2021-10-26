@@ -83,5 +83,6 @@ while True:
     log("[error] timeout")
     sys.exit(-1)
 
-sock.sendto(json.dumps({"eof": True, "data": "", "sequence": SEQUENCE, "ack": False}), dest)
+sock.sendto(json.dumps({"eof": True, "data": base64.b64encode(
+    b'').decode('ascii'), "sequence": SEQUENCE, "ack": False}).encode(), dest)
 sys.exit(0)
