@@ -43,7 +43,7 @@ while True:
     (data, addr) = result
 
     try:
-      decoded = json.loads(data)
+      decoded = json.loads(data.decode())
 
       # If the EOF flag is set, exit
       if (decoded['eof']):
