@@ -126,7 +126,9 @@ while True:
           acks.pop()
           # we have 3 duplicate ACKS
           # send back the packet with this sequence + 1
-          sequence_to_send = last_3[0]['ack'] + len(sent_packets[last_3[0]['ack']]['data'])
+          print('sequence to send')
+          sequence_to_send = last_3[0] + len(sent_packets[last_3[0]]['data'])
+          print('sequence to send')
           print(sequence_to_send)
           packets_to_send = list(filter(
               lambda p: p['sequence'] >= sequence_to_send, list(sent_packets.values())))
