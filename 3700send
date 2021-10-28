@@ -93,7 +93,7 @@ while True:
     cwnd = 1
 
     sorted_sequences_so_far = list(sent_packets.keys())
-    sorted_sequences_so_far.sort()
+    sorted_sequences_so_far.sort(reverse=True)
     print('sorted_sequences_so_far')
     print(sorted_sequences_so_far)
     highest_seq_so_far = sorted_sequences_so_far[0]
