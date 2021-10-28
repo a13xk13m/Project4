@@ -45,6 +45,7 @@ sock.settimeout(TIMEOUT)
 def log(string):
   sys.stderr.write(datetime.datetime.now().strftime("%H:%M:%S.%f") + " " + string + "\n")
 
+expected_acks = []
 def send_next_packet():
   global SEQUENCE
 
@@ -54,6 +55,7 @@ def send_next_packet():
            "ack": False, "eof": False}
     msg = json.dumps(obj)
     sent_packets[SEQUENCE] = obj
+    expected_acks.append(SEQUENCE + len(data))
     SEQUENCE += len(data)
 
     if sock.sendto(msg.encode(), dest) < len(msg):
@@ -73,7 +75,9 @@ def updateSlowStart(window):
   else:
     window = window + 1 / window;
 
+
 def send_next_packets():
+  expected_acks = []
   for x in range(0, cwnd):
     if (not send_next_packet()):
         return False
@@ -107,8 +111,9 @@ while True:
       updateSlowStart(cwnd)
       if decoded['ack'] == SEQUENCE:
         log("[recv ack] " + str(SEQUENCE))
-        # Try to send next packet; break if no more data
-        if (not send_next_packets()):
+        expected_acks.remove(decoded['ack'])
+        # Try to send next packets; break if no more data
+        if (len(expected_acks) == 0 and not send_next_packets()):
           break
       elif len(acks) >= 3:
         print('in elif for 3 dup acks')
