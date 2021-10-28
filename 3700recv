@@ -53,6 +53,10 @@ while True:
         log("[completed]")
         sys.exit(0)
 
+      log('in receive')
+      log(str(lastSeenACK['ack']))
+      log(str(len(decodedData)))
+      log(decoded['sequence'])
       got_expected_packet = lastSeenACK['ack'] + len(decodedData) == decoded['sequence'] if lastSeenACK else True
 
       # If there is data, we accept it and print it out
