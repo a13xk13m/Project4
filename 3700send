@@ -26,6 +26,9 @@ DATA_SIZE = 1000
 TIMEOUT = 30
 SEQUENCE = 0
 
+acks = []
+sent_packets = {}
+
 # Bind to localhost and an ephemeral port
 IP_PORT = sys.argv[1]
 UDP_IP = IP_PORT[0:IP_PORT.find(":")]
@@ -44,8 +47,10 @@ def send_next_packet():
 
   data = sys.stdin.buffer.read(DATA_SIZE)
   if (len(data) > 0):
-    msg = json.dumps({"sequence": SEQUENCE, "data": base64.b64encode(data).decode('ascii'),
-     "ack": False, "eof": False})
+    obj = {"sequence": SEQUENCE, "data": base64.b64encode(data).decode('ascii'),
+           "ack": False, "eof": False}
+    msg = json.dumps(obj)
+    sent_packets[SEQUENCE] = obj
     SEQUENCE += len(data)
 
     if sock.sendto(msg.encode(), dest) < len(msg):
@@ -69,11 +74,30 @@ while True:
     try:
       decoded = json.loads(data)
       # If there is an ack, send next packet
+      acks.append(decoded)
       if decoded['ack'] == SEQUENCE:
         log("[recv ack] " + str(SEQUENCE))
         # Try to send next packet; break if no more data
         if (not send_next_packet()):
           break
+      else:
+        last_3 = acks[-3:]
+        if last_3.count(last_3[0]) == len(last_3):
+          # we have 3 duplicate ACKS
+          # send back the packet with this sequence + 1
+          sequence_to_send = last_3[0]['ack'] + len(sent_packets[last_3[0]['ack']]['data'])
+
+          packets_to_send = list(filter(
+              lambda p: p['sequence'] >= sequence_to_send, list(sent_packets.values())))
+
+          SEQUENCE = sequence_to_send
+          for packet in packets_to_send:
+            if sock.sendto(packet.encode(), dest) < len(packet):
+              log("IN RESEND [error] unable to fully send packet")
+            else:
+              log("IN RENSEND [send data] " + str(SEQUENCE) + " (" + str(len(data)) + ")")
+            SEQUENCE += len(data)
+            
     except (ValueError, KeyError, TypeError):
       log("[recv corrupt packet]")
   else:
