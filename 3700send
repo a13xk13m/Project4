@@ -94,6 +94,8 @@ while True:
 
     sorted_sequences_so_far = list(sent_packets.keys())
     sorted_sequences_so_far.sort()
+    print('sorted_sequences_so_far')
+    print(sorted_sequences_so_far)
     highest_seq_so_far = sorted_sequences_so_far[0]
     packet = sent_packets[highest_seq_so_far]
     decodedData = base64.b64decode(packet['data'].encode('ascii'))
