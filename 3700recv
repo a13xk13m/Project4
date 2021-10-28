@@ -58,7 +58,7 @@ while True:
         log(str(lastSeenACK['ack']))
         log(str(len(decodedData)))
         log(str(decoded['sequence']))
-      got_expected_packet = lastSeenACK['ack'] + len(decodedData) == decoded['sequence'] if lastSeenACK else True
+      got_expected_packet = lastSeenACK['ack'] == decoded['sequence'] if lastSeenACK else True
 
       # If there is data, we accept it and print it out
       if (decodedData and got_expected_packet):
