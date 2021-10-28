@@ -36,6 +36,7 @@ log("[bound] " + str(UDP_PORT))
 
 # Last seen ACK
 lastSeenACK = {}
+seen_acks = []
 
 # Now listen for packets
 while True:
@@ -58,9 +59,10 @@ while True:
       log(str(got_expected_packet))
 
       # If there is data, we accept it and print it out
-      if (decodedData and got_expected_packet):
+      if (decodedData and got_expected_packet and not decoded['sequence'] in seen_acks):
         # If we receive data, we assume it's in-order
         # You will need to do much more here
+        seen_acks.append(decoded['sequence'])
         log("[recv data] " + str(decoded['sequence']) + " (" + str(len(decodedData)) + ") ACCEPTED (in-order)")
         sys.stdout.buffer.write(decodedData)
 
