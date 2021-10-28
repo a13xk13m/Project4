@@ -69,8 +69,7 @@ while True:
   try:
     result = sock.recvfrom(MSG_SIZE)
   except socket.timeout:
-    print('nonetype')
-    print(sent_packets)
+    log(str(sent_packets['sequence']))
     packet = list(sent_packets.values()).sort(key=lambda p: p['sequence'], reverse=True)[0]
     if sock.sendto(packet.encode(), dest) < len(packet):
       log("IN TIMEOUT RESEND [error] unable to fully send packet")
