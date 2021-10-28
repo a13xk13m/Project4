@@ -51,10 +51,10 @@ def send_next_packet():
 
   data = sys.stdin.buffer.read(DATA_SIZE)
   if (len(data) > 0):
+    SEQUENCE += len(data)
     obj = {"sequence": SEQUENCE, "data": base64.b64encode(data).decode('ascii'),
            "ack": False, "eof": False}
     msg = json.dumps(obj)
-    SEQUENCE += len(data)
     sent_packets[SEQUENCE] = obj
     expected_acks.append(SEQUENCE)
 
