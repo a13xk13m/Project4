@@ -107,7 +107,7 @@ while True:
     try:
       decoded = json.loads(data)
       # If there is an ack, send next packet
-      acks.append(decoded)
+      acks.append(decoded['ack'])
       updateSlowStart(cwnd)
       print(decoded)
       if decoded['ack'] == SEQUENCE:
@@ -121,6 +121,7 @@ while True:
         print('in elif for 3 dup acks')
         last_3 = acks[-3:]
         if last_3.count(last_3[0]) == len(last_3):
+          print('RESENDING PACKETS BC 3 DUPLICATE ACKS')
           # we have 3 duplicate ACKS
           # send back the packet with this sequence + 1
           sequence_to_send = last_3[0]['ack'] + len(sent_packets[last_3[0]['ack']]['data'])
