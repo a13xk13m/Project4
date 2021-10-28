@@ -77,7 +77,7 @@ while True:
     if sock.sendto(json.dumps(packet).encode(), dest) < len(packet):
       log("IN TIMEOUT RESEND [error] unable to fully send packet")
     else:
-      log("IN TIMEOUT RESEND [send data] " + str(SEQUENCE) + " (" + str(len(data)) + ")")
+      log("IN TIMEOUT RESEND [send data] " + str(SEQUENCE) + " (" + str(len(packet['data'])) + ")")
     continue
 
   if result:
@@ -106,7 +106,7 @@ while True:
             if sock.sendto(json.dumps(packet).encode(), dest) < len(packet):
               log("IN RESEND [error] unable to fully send packet")
             else:
-              log("IN RENSEND [send data] " + str(SEQUENCE) + " (" + str(len(data)) + ")")
+              log("IN RENSEND [send data] " + str(SEQUENCE) + " (" + str(len(packet['data'])) + ")")
             SEQUENCE += len(data)
 
     except (ValueError, KeyError, TypeError):
