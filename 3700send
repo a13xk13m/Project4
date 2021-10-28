@@ -74,7 +74,7 @@ while True:
     sorted_sequences_so_far.sort()
     highest_seq_so_far = sorted_sequences_so_far[0]
     packet = sent_packets[highest_seq_so_far]
-    if sock.sendto(packet.encode(), dest) < len(packet):
+    if sock.sendto(json.dumps(packet).encode(), dest) < len(packet):
       log("IN TIMEOUT RESEND [error] unable to fully send packet")
     else:
       log("IN TIMEOUT RESEND [send data] " + str(SEQUENCE) + " (" + str(len(data)) + ")")
@@ -103,7 +103,7 @@ while True:
 
           SEQUENCE = sequence_to_send
           for packet in packets_to_send:
-            if sock.sendto(packet.encode(), dest) < len(packet):
+            if sock.sendto(json.dumps(packet).encode(), dest) < len(packet):
               log("IN RESEND [error] unable to fully send packet")
             else:
               log("IN RENSEND [send data] " + str(SEQUENCE) + " (" + str(len(data)) + ")")
