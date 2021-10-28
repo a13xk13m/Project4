@@ -70,7 +70,9 @@ while True:
     result = sock.recvfrom(MSG_SIZE)
   except socket.timeout:
     log(str(sent_packets))
-    highest_seq_so_far = list(sent_packets.keys()).sort()[0]
+    sorted_sequences_so_far = list(sent_packets.keys())
+    sorted_sequences_so_far.sort()
+    highest_seq_so_far = sorted_sequences_so_far[0]
     packet = sent_packets[highest_seq_so_far]
     if sock.sendto(packet.encode(), dest) < len(packet):
       log("IN TIMEOUT RESEND [error] unable to fully send packet")
