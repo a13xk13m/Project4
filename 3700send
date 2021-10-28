@@ -23,7 +23,7 @@ import base64
 
 MSG_SIZE = 1500
 DATA_SIZE = 1000
-TIMEOUT = 4
+TIMEOUT = 2
 SEQUENCE = 0
 
 acks = []
@@ -109,29 +109,28 @@ while True:
       # If there is an ack, send next packet
       acks.append(decoded['ack'])
       updateSlowStart(cwnd)
-      print(decoded)
       if decoded['ack'] == SEQUENCE:
-        log("[recv ack] " + str(SEQUENCE))
+        # log("[recv ack] " + str(SEQUENCE))
         if decoded['ack'] in expected_acks:
           expected_acks.remove(decoded['ack'])
         # Try to send next packets; break if no more data
         if (len(expected_acks) == 0 and not send_next_packets()):
           break
       elif len(acks) >= 3:
-        print('in elif for 3 dup acks')
         last_3 = acks[-3:]
         if last_3.count(last_3[0]) == len(last_3):
           print('RESENDING PACKETS BC 3 DUPLICATE ACKS')
+          print(acks)
           acks.pop()
           acks.pop()
           acks.pop()
           # we have 3 duplicate ACKS
           # send back the packet with this sequence + 1
           sequence_to_send = last_3[0]['ack'] + len(sent_packets[last_3[0]['ack']]['data'])
-
+          print(sequence_to_send)
           packets_to_send = list(filter(
               lambda p: p['sequence'] >= sequence_to_send, list(sent_packets.values())))
-
+          print(len(packets_to_send))
           SEQUENCE = sequence_to_send
           for packet in packets_to_send:
             if sock.sendto(json.dumps(packet).encode(), dest) < len(packet):

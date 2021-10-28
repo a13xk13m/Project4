@@ -55,8 +55,6 @@ while True:
         sys.exit(0)
 
       got_expected_packet = lastSeenACK['ack'] == decoded['sequence'] if lastSeenACK else True
-      log("Got expected packet")
-      log(str(got_expected_packet))
 
       # If there is data, we accept it and print it out
       if (decodedData and got_expected_packet and not decoded['sequence'] in seen_acks):
