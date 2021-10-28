@@ -128,7 +128,9 @@ while True:
           # we have 3 duplicate ACKS
           # send back the packet with this sequence + 1
           print('sequence to send')
-          sequence_to_send = last_3[0] + len(sent_packets[last_3[0]]['data'])
+          last_3_decoded_data = base64.b64decode(
+              sent_packets[last_3[0]]['data'].encode('ascii'))
+          sequence_to_send = last_3[0] + len(last_3_decoded_data)
           print('sequence to send')
           print(sequence_to_send)
           packets_to_send = list(filter(
