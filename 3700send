@@ -133,6 +133,7 @@ while True:
           sequence_to_send = last_3[0] + len(last_3_decoded_data)
           print('sequence to send')
           print(sequence_to_send)
+          print(sent_packets.keys())
           packets_to_send = list(filter(
               lambda p: p['sequence'] >= sequence_to_send, list(sent_packets.values())))
           print(len(packets_to_send))
