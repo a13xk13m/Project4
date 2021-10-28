@@ -134,8 +134,11 @@ while True:
           print('sequence to send')
           print(sequence_to_send)
           print(sent_packets.keys())
-          packets_to_send = list(filter(
-              lambda p: p['sequence'] >= sequence_to_send, list(sent_packets.values())))
+          keys_of_packets_to_send = list(filter(
+              lambda p: p >= sequence_to_send, list(sent_packets.keys())))
+          packets_to_send = []
+          for key in keys_of_packets_to_send:
+            packets_to_send.append(sent_packets[key])
           print(len(packets_to_send))
           SEQUENCE = sequence_to_send
           decodedData = base64.b64decode(packet['data'].encode('ascii'))
