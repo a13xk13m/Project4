@@ -61,7 +61,7 @@ def send_next_packet():
     if sock.sendto(msg.encode(), dest) < len(msg):
       log("[error] unable to fully send packet")
     else:
-      log("[send data] " + str(SEQUENCE) + " (" + str(len(data)) + ")")
+      log("[send data] " + str(obj['sequence']) + " (" + str(len(data)) + ")")
     return True
   else:
     return False
@@ -100,7 +100,7 @@ while True:
     if sock.sendto(json.dumps(packet).encode(), dest) < len(packet):
       log("IN TIMEOUT RESEND [error] unable to fully send packet")
     else:
-      log("IN TIMEOUT RESEND [send data] " + str(SEQUENCE) + " (" + str(len(decodedData)) + ")")
+      log("IN TIMEOUT RESEND [send data] " + str(packet['sequence']) + " (" + str(len(decodedData)) + ")")
     continue
 
   if result:
@@ -122,9 +122,6 @@ while True:
         if last_3.count(last_3[0]) == len(last_3):
           print('RESENDING PACKETS BC 3 DUPLICATE ACKS')
           print(acks)
-          acks.pop()
-          acks.pop()
-          acks.pop()
           # we have 3 duplicate ACKS
           # send back the packet with this sequence + 1
           print('sequence to send')
@@ -146,7 +143,7 @@ while True:
             if sock.sendto(json.dumps(packet).encode(), dest) < len(packet):
               log("IN RESEND [error] unable to fully send packet")
             else:
-              log("IN RENSEND [send data] " + str(SEQUENCE) +
+              log("IN RENSEND [send data] " + str(packet['sequence']) +
                   " (" + str(len(decodedData)) + ")")
             SEQUENCE += len(decodedData)
 
