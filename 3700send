@@ -54,8 +54,8 @@ def send_next_packet():
            "ack": False, "eof": False}
     msg = json.dumps(obj)
     sent_packets[SEQUENCE] = obj
-    expected_acks.append(SEQUENCE)
     SEQUENCE += len(data)
+    expected_acks.append(SEQUENCE)
 
     if sock.sendto(msg.encode(), dest) < len(msg):
       log("[error] unable to fully send packet")
