@@ -99,12 +99,12 @@ while True:
     print('sorted_sequences_so_far')
     print(sorted_sequences_so_far)
     highest_seq_so_far = sorted_sequences_so_far[0]
-    packet = sent_packets[highest_seq_so_far + 1000]
+    packet = sent_packets[highest_seq_so_far]
     decodedData = base64.b64decode(packet['data'].encode('ascii'))
     if sock.sendto(json.dumps(packet).encode(), dest) < len(packet):
       log("IN TIMEOUT RESEND [error] unable to fully send packet")
     else:
-      log("IN TIMEOUT RESEND [send data] " + str(packet['sequence']) + " (" + str(len(decodedData)) + ")")
+      log("IN TIMEOUT RESEND [send data] " + str(packet['sequence'] + 1000) + " (" + str(len(decodedData)) + ")")
     continue
 
   if result:
