@@ -53,8 +53,8 @@ def send_next_packet():
     obj = {"sequence": SEQUENCE, "data": base64.b64encode(data).decode('ascii'),
            "ack": False, "eof": False}
     msg = json.dumps(obj)
-    sent_packets[SEQUENCE] = obj
     SEQUENCE += len(data)
+    sent_packets[SEQUENCE] = obj
     expected_acks.append(SEQUENCE)
 
     if sock.sendto(msg.encode(), dest) < len(msg):
