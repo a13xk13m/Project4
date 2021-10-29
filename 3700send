@@ -70,7 +70,7 @@ send_next_packet()
 
 def updateSlowStart():
   global cwnd
-  if (cwnd < ssthresth):
+  if (int(cwnd) < ssthresth):
     cwnd = cwnd + 1
   else:
     cwnd = cwnd + 1 / cwnd;
