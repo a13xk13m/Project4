@@ -142,7 +142,7 @@ while True:
             packets_to_send.append(sent_packets[key])
           print(len(packets_to_send))
           SEQUENCE = sequence_to_send
-          decodedData = base64.b64decode(packet['data'].encode('ascii'))
+          decodedData = base64.b64decode(decoded['data'].encode('ascii'))
           for packet in packets_to_send:
             if sock.sendto(json.dumps(packet).encode(), dest) < len(packet):
               log("IN RESEND [error] unable to fully send packet")
