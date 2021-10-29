@@ -68,17 +68,17 @@ def send_next_packet():
 # Send first packet
 send_next_packet()
 
-def updateSlowStart(window):
+def updateSlowStart():
   global cwnd
-  if (window < ssthresth):
-    cwnd = window + 1
+  if (cwnd < ssthresth):
+    cwnd = cwnd + 1
   else:
-    cwnd = window + 1 / window;
+    cwnd = cwnd + 1 / cwnd;
 
 
 def send_next_packets():
   expected_acks = []
-  for x in range(0, cwnd):
+  for x in range(0, int(cwnd)):
     if (not send_next_packet()):
         return False
   return True
@@ -113,7 +113,7 @@ while True:
       decoded = json.loads(data)
       # If there is an ack, send next packet
       acks.append(decoded['ack'])
-      updateSlowStart(cwnd)
+      updateSlowStart()
       if decoded['ack'] == SEQUENCE:
         # log("[recv ack] " + str(SEQUENCE))
         if decoded['ack'] in expected_acks:
