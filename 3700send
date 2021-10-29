@@ -71,9 +71,9 @@ send_next_packet()
 
 def updateSlowStart(window):
   if (window < ssthresth):
-    window = window + 1
+    cwnd = window + 1
   else:
-    window = window + 1 / window;
+    cwnd = window + 1 / window;
 
 
 def send_next_packets():
