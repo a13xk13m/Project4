@@ -28,7 +28,7 @@ SEQUENCE = 0
 
 acks = []
 sent_packets = {}
-cwnd = 1
+cwnd = 8
 ssthresth = 16
 
 # Bind to localhost and an ephemeral port
@@ -113,7 +113,7 @@ while True:
       decoded = json.loads(data)
       # If there is an ack, send next packet
       acks.append(decoded['ack'])
-      updateSlowStart()
+      #updateSlowStart()
       if decoded['ack'] == SEQUENCE:
         # log("[recv ack] " + str(SEQUENCE))
         if decoded['ack'] in expected_acks:
