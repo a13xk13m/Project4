@@ -28,7 +28,6 @@ SEQUENCE = 0
 
 acks = []
 sent_packets = {}
-global cwnd
 cwnd = 1
 ssthresth = 16
 
