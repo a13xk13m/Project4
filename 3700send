@@ -69,6 +69,7 @@ def send_next_packet():
 send_next_packet()
 
 def updateSlowStart(window):
+  global cwnd
   if (window < ssthresth):
     cwnd = window + 1
   else:
