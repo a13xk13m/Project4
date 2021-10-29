@@ -90,7 +90,7 @@ while True:
     result = sock.recvfrom(MSG_SIZE)
   except socket.timeout:
     # ssthresth = cwnd / 2
-    cwnd = cwnd / 2
+    cwnd = cwnd / 2 if cwnd > 2 else cwnd
     print('cwnd')
     print(cwnd)
 
