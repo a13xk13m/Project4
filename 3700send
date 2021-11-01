@@ -78,9 +78,10 @@ def updateSlowStart():
 
 def send_next_packets():
   expected_acks = []
-  for x in range(0, int(cwnd)):
-    if (not send_next_packet()):
-        return False
+  if (not send_next_packet()):
+    return False
+  for x in range(1, int(cwnd)):
+    send_next_packet()
   return True
 
 # Now read in data, send packets
