@@ -37,6 +37,9 @@ log("[bound] " + str(UDP_PORT))
 # Last seen ACK
 lastSeenACK = {}
 seen_acks = []
+min_expected_seq = 0
+max_expected_seq = 7000
+num_packets_received_in_range = 0
 
 # Now listen for packets
 while True:
@@ -54,15 +57,15 @@ while True:
         log("[completed]")
         sys.exit(0)
 
-      if lastSeenACK:
-        log('receiver: lastSeenAck["ack"]')
-        log(str(lastSeenACK['ack']))
-        log('receiver decoded["sequence"]')
-        log(str(decoded['sequence']))
-      got_expected_packet = lastSeenACK['ack'] == decoded['sequence'] if lastSeenACK else True
+      got_expected_packet = decoded['sequence'] >= min_expected_seq and decoded['sequence'] <= max_expected_seq
 
       # If there is data, we accept it and print it out
       if (decodedData and got_expected_packet and not decoded['sequence'] in seen_acks):
+        num_packets_received_in_range += 1
+        if num_packets_received_in_range == 8:
+          min_expected_seq += 8000
+          max_expected_seq += 8000
+          num_packets_received_in_range = 0
         # If we receive data, we assume it's in-order
         # You will need to do much more here
         seen_acks.append(decoded['sequence'])
@@ -70,8 +73,8 @@ while True:
         sys.stdout.buffer.write(decodedData)
 
       # Store last seen ack.
-      if got_expected_packet:
-        lastSeenACK = {"ack": decoded['sequence'] + len(decodedData)}
+      # if got_expected_packet:
+      lastSeenACK = {"ack": decoded['sequence'] + len(decodedData)}
         
       if sock.sendto(json.dumps(lastSeenACK).encode(), addr) < len(lastSeenACK):
           log("[error] unable to fully send packet")
