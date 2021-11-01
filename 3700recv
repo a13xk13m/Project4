@@ -37,10 +37,22 @@ log("[bound] " + str(UDP_PORT))
 # Last seen ACK
 lastSeenACK = {}
 seen_acks = []
-received_packets = []
+received_packet_buffer = [] # packets that we've received but still need to be added to stdout
 min_expected_seq = 0
 max_expected_seq = 7000
 num_packets_received_in_range = 0
+next_seq_to_write = 0
+
+def write_packet_to_stdout(decoded_packet):
+  received_packet_buffer.append(decoded_packet)
+  received_packet_buffer.sort(key=lambda p: p['sequence'])
+
+  for p in received_packet_buffer:
+    if p['sequence'] == next_seq_to_write:
+      data = base64.b64decode(decoded_packet['data'].encode('ascii'))
+      sys.stdout.buffer.write(data)
+      next_seq_to_write += len(data)
+      received_packet_buffer.remove(p)
 
 # Now listen for packets
 while True:
@@ -68,17 +80,10 @@ while True:
           max_expected_seq += 8000
           num_packets_received_in_range = 0
 
-          received_packets.sort(key=lambda p: p['sequence'])
-          for packet in received_packets:
-            data = base64.b64decode(packet['data'].encode('ascii'))
-            sys.stdout.buffer.write(data)
-          received_packets = []
-        else:
-          received_packets.append(decoded)
-          
-        seen_acks.append(decoded['sequence'])
         log("[recv data] " + str(decoded['sequence']) +
             " (" + str(len(decodedData)) + ") ACCEPTED (in-order)")
+        write_packet_to_stdout(decoded)
+        seen_acks.append(decoded['sequence'])
 
       # Store last seen ack.
       # if got_expected_packet:
