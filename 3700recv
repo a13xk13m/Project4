@@ -75,7 +75,7 @@ while True:
       # Store last seen ack.
       # if got_expected_packet:
       lastSeenACK = {"ack": decoded['sequence'] + len(decodedData)}
-        
+
       if sock.sendto(json.dumps(lastSeenACK).encode(), addr) < len(lastSeenACK):
           log("[error] unable to fully send packet")
 

@@ -116,7 +116,7 @@ while True:
       acks.append(decoded['ack'])
       #updateSlowStart()
       if decoded['ack'] <= SEQUENCE:
-        log("[recv ack] " + decoded['ack'])
+        log("[recv ack] " + str(decoded['ack']))
         if decoded['ack'] in expected_acks:
           expected_acks.remove(decoded['ack'])
         # Try to send next packets; break if no more data
