@@ -50,7 +50,8 @@ def write_packet_to_stdout(decoded_packet):
 
   for p in received_packet_buffer:
     if p['sequence'] == next_seq_to_write:
-      data = base64.b64decode(decoded_packet['data'].encode('ascii'))
+      log('writing ' + str(p['sequence']) + ' to stdout')
+      data = base64.b64decode(p['data'].encode('ascii'))
       sys.stdout.buffer.write(data)
       next_seq_to_write += len(data)
       received_packet_buffer.remove(p)
@@ -81,8 +82,7 @@ while True:
           max_expected_seq += 8000
           num_packets_received_in_range = 0
 
-        log("[recv data] " + str(decoded['sequence']) +
-            " (" + str(len(decodedData)) + ") ACCEPTED (in-order)")
+        log("[recv data] " + str(decoded['sequence']))
         write_packet_to_stdout(decoded)
         seen_acks.append(decoded['sequence'])
 
