@@ -119,6 +119,8 @@ while True:
         if decoded['ack'] in expected_acks:
           expected_acks.remove(decoded['ack'])
         # Try to send next packets; break if no more data
+        print('expected_acks')
+        print(expected_acks)
         if (len(expected_acks) == 0 and not send_next_packets()):
           break
       elif len(acks) >= 3:
