@@ -49,7 +49,7 @@ def write_packet_to_stdout(decoded_packet):
   received_packet_buffer.sort(key=lambda p: p['sequence'])
 
   log('received_packet_buffer')
-  log(received_packet_buffer)
+  log(str(received_packet_buffer))
   for i, p in enumerate(received_packet_buffer):
     if p['sequence'] == next_seq_to_write:
       log('writing ' + str(p['sequence']) + ' to stdout')
