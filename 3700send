@@ -104,7 +104,7 @@ while True:
     if sock.sendto(json.dumps(packet).encode(), dest) < len(packet):
       log("IN TIMEOUT RESEND [error] unable to fully send packet")
     else:
-      log("IN TIMEOUT RESEND [send data] " + str(packet['sequence'] + 1000) + " (" + str(len(decodedData)) + ")")
+      log("IN TIMEOUT RESEND [send data] " + str(packet['sequence']) + " (" + str(len(decodedData)) + ")")
     continue
 
   if result:
