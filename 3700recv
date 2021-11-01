@@ -37,6 +37,7 @@ log("[bound] " + str(UDP_PORT))
 # Last seen ACK
 lastSeenACK = {}
 seen_acks = []
+received_packets = []
 min_expected_seq = 0
 max_expected_seq = 7000
 num_packets_received_in_range = 0
@@ -66,11 +67,18 @@ while True:
           min_expected_seq += 8000
           max_expected_seq += 8000
           num_packets_received_in_range = 0
-        # If we receive data, we assume it's in-order
-        # You will need to do much more here
+
+          received_packets.sort(key=lambda p: p['sequence'])
+          for packet in received_packets:
+            data = base64.b64decode(packet['data'].encode('ascii'))
+            sys.stdout.buffer.write(data)
+          received_packets = []
+        else:
+          received_packets.append(decoded)
+          
         seen_acks.append(decoded['sequence'])
-        log("[recv data] " + str(decoded['sequence']) + " (" + str(len(decodedData)) + ") ACCEPTED (in-order)")
-        sys.stdout.buffer.write(decodedData)
+        log("[recv data] " + str(decoded['sequence']) +
+            " (" + str(len(decodedData)) + ") ACCEPTED (in-order)")
 
       # Store last seen ack.
       # if got_expected_packet:
