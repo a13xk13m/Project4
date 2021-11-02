@@ -1,0 +1,3 @@
+# Overview
+We used the provided starter code and adapted it to Python3. This caused a few issues as adapting and determining how things were encoded slowed us down, but were ultimately fixed.
+We followed the simple to advanced test cases to guide how we wanted to implement new features. This ended up being drops and then reordering, however our system for dealing with reordered packets also ensured that dropped packets were effectively dealt with.
