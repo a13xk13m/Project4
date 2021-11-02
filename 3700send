@@ -23,7 +23,7 @@ import base64
 
 MSG_SIZE = 1500
 DATA_SIZE = 1000
-TIMEOUT = 0.6
+TIMEOUT = 0.55
 SEQUENCE = 0
 
 acks = []
