@@ -50,14 +50,17 @@ def write_packet_to_stdout(decoded_packet):
 
   log('received_packet_buffer')
   log(str(list(map(lambda x: x['sequence'], received_packet_buffer))))
+  indicies_to_remove = []
   for i, p in enumerate(received_packet_buffer):
     if p['sequence'] == next_seq_to_write:
       log('writing ' + str(p['sequence']) + ' to stdout')
       data = base64.b64decode(p['data'].encode('ascii'))
       sys.stdout.buffer.write(data)
       next_seq_to_write += len(data)
-      del received_packet_buffer[i]
-      i -= 1
+      indicies_to_remove.append(i)
+  
+  for index in indicies_to_remove:
+    del received_packet_buffer[index]
 
 # Now listen for packets
 while True:
