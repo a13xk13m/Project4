@@ -28,7 +28,7 @@ SEQUENCE = 0
 
 acks = []
 sent_packets = {}
-cwnd = 8
+cwnd = 12
 ssthresth = 16
 
 # Bind to localhost and an ephemeral port
