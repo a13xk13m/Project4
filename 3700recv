@@ -43,13 +43,12 @@ max_expected_seq = 7000
 num_packets_received_in_range = 0
 next_seq_to_write = 0
 
+# Write a packet to standard out and update queue so that program knows it has been written.
 def write_packet_to_stdout(decoded_packet):
   global next_seq_to_write
   received_packet_buffer.append(decoded_packet)
   received_packet_buffer.sort(key=lambda p: p['sequence'])
-
-  log('received_packet_buffer')
-  log(str(list(map(lambda x: x['sequence'], received_packet_buffer))))
+  # Drop packets from queue if they have been fully written.
   indicies_to_remove = []
   for i, p in enumerate(received_packet_buffer):
     if p['sequence'] == next_seq_to_write:
@@ -84,11 +83,6 @@ while True:
 
       # If there is data, we accept it and print it out
       if (decodedData and got_expected_packet and not decoded['sequence'] in seen_acks):
-        # num_packets_received_in_range += 1
-        # if num_packets_received_in_range == 8:
-        #   min_expected_seq += 8000
-        #   max_expected_seq += 8000
-        #   num_packets_received_in_range = 0
 
         log("[recv data] " + str(decoded['sequence']))
         write_packet_to_stdout(decoded)

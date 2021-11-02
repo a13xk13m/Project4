@@ -43,7 +43,7 @@ sock.settimeout(TIMEOUT)
 
 def log(string):
   sys.stderr.write(datetime.datetime.now().strftime("%H:%M:%S.%f") + " " + string + "\n")
-
+# Store expected acks for rebuilding purposes.
 expected_acks = []
 def send_next_packet():
   global SEQUENCE
@@ -68,14 +68,7 @@ def send_next_packet():
 # Send first packet
 send_next_packet()
 
-def updateSlowStart():
-  global cwnd
-  if (int(cwnd) < ssthresth):
-    cwnd = cwnd + 1
-  else:
-    cwnd = cwnd + 1 / cwnd;
-
-
+# Send the next cwnd number of packets, if unable to return false.
 def send_next_packets():
   expected_acks = []
   if (not send_next_packet()):
@@ -89,15 +82,8 @@ while True:
   log("ABOUT TO SLEEP")
   try:
     result = sock.recvfrom(MSG_SIZE)
+  # On socket timeout, resend proper packets.
   except socket.timeout:
-    # ssthresth = cwnd / 2
-    # cwnd = cwnd / 2 if cwnd > 2 else cwnd
-
-    # sorted_sequences_so_far = list(sent_packets.keys())
-    # sorted_sequences_so_far.sort(reverse=True)
-    # print('sorted_sequences_so_far')
-    # print(sorted_sequences_so_far)
-    # highest_seq_so_far = sorted_sequences_so_far[0]
     if len(expected_acks) != 0:
       packet = sent_packets[expected_acks[0]]
       decodedData = base64.b64decode(packet['data'].encode('ascii'))
@@ -108,7 +94,7 @@ while True:
       continue
     else:
       print('expected acks length is 0 on timeout, something went wrong')
-
+  # If result exists, process ack and send more if necessary.
   if result:
     (data, addr) = result
     try:
@@ -121,32 +107,25 @@ while True:
         if decoded['ack'] in expected_acks:
           expected_acks.remove(decoded['ack'])
         # Try to send next packets; break if no more data
-        print('expected_acks')
-        print(expected_acks)
         if (len(expected_acks) == 0 and not send_next_packets()):
           break
       elif len(acks) >= 3:
         last_3 = acks[-3:]
         if last_3.count(last_3[0]) == len(last_3):
-          print('RESENDING PACKETS BC 3 DUPLICATE ACKS')
-          print(acks)
           # we have 3 duplicate ACKS
           # send back the packet with this sequence + 1
-          print('sequence to send')
           last_3_decoded_data = base64.b64decode(
               sent_packets[last_3[0]]['data'].encode('ascii'))
           sequence_to_send = last_3[0] + len(last_3_decoded_data)
-          print('sequence to send')
-          print(sequence_to_send)
-          print(sent_packets.keys())
           keys_of_packets_to_send = list(filter(
               lambda p: p >= sequence_to_send, list(sent_packets.keys())))
           packets_to_send = []
+          # Add packets that haven't made it to the receiver and reset sequence.
           for key in keys_of_packets_to_send:
             packets_to_send.append(sent_packets[key])
-          print(len(packets_to_send))
           SEQUENCE = sequence_to_send
           decodedData = base64.b64decode(decoded['data'].encode('ascii'))
+          # Send all packets that need to be sent.
           for packet in packets_to_send:
             if sock.sendto(json.dumps(packet).encode(), dest) < len(packet):
               log("IN RESEND [error] unable to fully send packet")
