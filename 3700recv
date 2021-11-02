@@ -79,11 +79,11 @@ while True:
 
       # If there is data, we accept it and print it out
       if (decodedData and got_expected_packet and not decoded['sequence'] in seen_acks):
-        num_packets_received_in_range += 1
-        if num_packets_received_in_range == 8:
-          min_expected_seq += 8000
-          max_expected_seq += 8000
-          num_packets_received_in_range = 0
+        # num_packets_received_in_range += 1
+        # if num_packets_received_in_range == 8:
+        #   min_expected_seq += 8000
+        #   max_expected_seq += 8000
+        #   num_packets_received_in_range = 0
 
         log("[recv data] " + str(decoded['sequence']))
         write_packet_to_stdout(decoded)
