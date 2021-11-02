@@ -59,7 +59,8 @@ def write_packet_to_stdout(decoded_packet):
       next_seq_to_write += len(data)
       indicies_to_remove.append(i)
   
-  for idx in indicies_to_remove.reverse():
+  indicies_to_remove.reverse()
+  for idx in indicies_to_remove:
     del received_packet_buffer[idx]
 
 # Now listen for packets
