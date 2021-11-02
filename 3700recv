@@ -75,7 +75,8 @@ while True:
         log("[completed]")
         sys.exit(0)
 
-      got_expected_packet = decoded['sequence'] >= min_expected_seq and decoded['sequence'] <= max_expected_seq
+      # got_expected_packet = decoded['sequence'] >= min_expected_seq and decoded['sequence'] <= max_expected_seq
+      got_expected_packet = True
 
       # If there is data, we accept it and print it out
       if (decodedData and got_expected_packet and not decoded['sequence'] in seen_acks):
